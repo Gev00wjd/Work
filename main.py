@@ -52,8 +52,7 @@ def print_hi(url = "https://file.notion.so/f/s/0f8850ad-e46f-4f37-99ea-0e4e2a6af
 
             profit = income - expenses
             percent_profit_product_of_warehouse = (profit / summary_data[p_name]['profit']) * 100
-
-            table[order_id] = { 'product' : p_name,'quantity' : quantity,'income' : income,'expenses' : expenses, 'profit': profit, 'order_profit' : order_profit, 'percent_profit_product_of_warehouse' : percent_profit_product_of_warehouse}
+            table[order_id] = {'order_id' : order_id, 'warehouse_name' : w_name , 'product' : p_name,'quantity' : quantity,'income' : income,'expenses' : expenses, 'profit': profit, 'order_profit' : order_profit, 'percent_profit_product_of_warehouse' : percent_profit_product_of_warehouse}
     sorted_products = sorted(table.items(), key=lambda x: x[1]['percent_profit_product_of_warehouse'], reverse=True)
     accumulated_percent = 0
     for product, product_data in sorted_products:
@@ -62,9 +61,11 @@ def print_hi(url = "https://file.notion.so/f/s/0f8850ad-e46f-4f37-99ea-0e4e2a6af
         percent_profit = product_data['percent_profit_product_of_warehouse']
         accumulated_percent += percent_profit
         product_data['accumulated_percent_profit_product_of_warehouse'] = accumulated_percent
-        print(accumulated_percent)
     tableFinal = []
     for product, product_data in sorted_products:
+        order_id = product_data['order_id']
+        w_name = product_data['warehouse_name']
+        order_profit = product_data['order_profit']
         product = product_data['product']
         quantity = product_data['quantity']
         profit = product_data['profit']
@@ -77,9 +78,9 @@ def print_hi(url = "https://file.notion.so/f/s/0f8850ad-e46f-4f37-99ea-0e4e2a6af
             category = 'B'
         else:
             category = 'C'
-        tableFinal.append(( product, quantity, profit, percent_profit, accumulated_percent, category))
+        tableFinal.append((order_id, w_name, product, quantity, profit,order_profit, percent_profit, accumulated_percent, category))
 
-    df = pd.DataFrame(tableFinal, columns=['product', 'quantity', 'profit', 'percent_profit_product_of_warehouse', 'accumulated_percent_profit_product_of_warehouse', 'category'])
+    df = pd.DataFrame(tableFinal, columns=['order_id', 'warehouse_name','product', 'quantity', 'profit','order_profit', 'percent_profit_product_of_warehouse', 'accumulated_percent_profit_product_of_warehouse', 'category'])
 
     print(df.to_string())
 
